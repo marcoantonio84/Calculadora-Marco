@@ -1,0 +1,157 @@
+
+import 'package:flutter/material.dart';
+
+void main() {
+runApp(CalculadoraApp());
+}
+
+class CalculadoraApp extends StatelessWidget {
+@OverRide
+Widget build(BuildContext context) {
+return MaterialApp(
+debugShowCheckedModeBanner: false,
+title: 'Calculadora',
+theme: ThemeData(
+primarySwatch: Colors.blue,
+),
+home: Calculadora(),
+);
+}
+}
+
+class Calculadora extends StatefulWidget {
+@OverRide
+_CalculadoraState createState() => _CalculadoraState();
+}
+
+class _CalculadoraState extends State {
+String _output = "0";
+String _resultado = "0";
+String _operador = "";
+double _num1 = 0;
+double _num2 = 0;
+
+void botaoPressionado(String textoBotao) {
+if (textoBotao == "LIMPAR") {
+_output = "0";
+_num1 = 0;
+_num2 = 0;
+_operador = "";
+} else if (textoBotao == "+" || textoBotao == "-" || textoBotao == "/" || textoBotao == "x") {
+_num1 = double.parse(_output);
+_operador = textoBotao;
+_output = "0";
+} else if (textoBotao == ".") {
+if (!_output.contains(".")) {
+_output = _output + textoBotao;
+}
+} else if (textoBotao == "=") {
+_num2 = double.parse(_output);
+
+  if (_operador == "+") {
+    _resultado = (_num1 + _num2).toString();
+  }
+  if (_operador == "-") {
+    _resultado = (_num1 - _num2).toString();
+  }
+  if (_operador == "x") {
+    _resultado = (_num1 * _num2).toString();
+  }
+  if (_operador == "/") {
+    _resultado = (_num1 / _num2).toString();
+  }
+
+  _output = _resultado;
+  _operador = "";
+} else {
+  _output = _output + textoBotao;
+}
+
+setState(() {
+  _output = double.parse(_output).toStringAsFixed(2);
+});
+}
+
+Widget criarBotao(String textoBotao) {
+return Expanded(
+child: OutlineButton(
+padding: EdgeInsets.all(24.0),
+child: Text(
+textoBotao,
+style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+),
+onPressed: () => botaoPressionado(textoBotao),
+),
+);
+}
+
+@OverRide
+Widget build(BuildContext context) {
+return Scaffold(
+appBar: AppBar(
+title: Text('Calculadora'),
+),
+body: Column(
+children: [
+Container(
+alignment: Alignment.centerRight,
+padding: EdgeInsets.symmetric(vertical: 24.0, horizontal: 12.0),
+child: Text(
+_output,
+style: TextStyle(
+fontSize: 48.0,
+fontWeight: FontWeight.bold,
+),
+),
+),
+Expanded(
+child: Divider(),
+),
+Column(
+children: [
+Row(
+children: [
+criarBotao("7"),
+criarBotao("8"),
+criarBotao("9"),
+criarBotao("/"),
+],
+),
+Row(
+children: [
+criarBotao("4"),
+criarBotao("5"),
+criarBotao("6"),
+criarBotao("x"),
+],
+),
+Row(
+children: [
+criarBotao("1"),
+criarBotao("2"),
+criarBotao("3"),
+criarBotao("-"),
+],
+),
+Row(
+children: [
+criarBotao("."),
+criarBotao("0"),
+criarBotao("00"),
+criarBotao("+"),
+],
+),
+Row(
+children: [
+criarBotao("LIMPAR"),
+criarBotao("="),
+],
+),
+],
+),
+],
+),
+);
+}
+}
+
